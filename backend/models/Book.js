@@ -9,11 +9,11 @@ const bookSchema = mongoose.Schema({
     genre: { type: String, required: true }, // - genre du livre
     ratings: [
         {
-            userId: { type: String, required: true}, // - identifiant MongoDB unique de l'utilisateur qui note le livre
-            grade: { type: Number, required: true }, // - note donnée à un livre
+            userId: { type: String }, // - identifiant MongoDB unique de l'utilisateur qui note le livre
+            grade: { type: Number }, // - note donnée à un livre
         }
     ], // - notes données à un livre
-    averageRating: { type: Number, required: true }, // - note moyenne du livre
+    averageRating: { type: Number }, // - note moyenne du livre
 })
 
 module.exports = mongoose.model('Book', bookSchema)
