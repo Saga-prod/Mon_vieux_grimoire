@@ -14,7 +14,7 @@ router.get('/bestrating', bookCtrl.getTheBestOnes)
 
 router.post('/', auth, multer, processImage, bookCtrl.createBook)
 
-router.post('/:id/rating', auth, bookCtrl.ratingOne)
+// router.post('/:id/rating', auth, bookCtrl.ratingOne)
 
 router.put('/:id', auth, multer, processImage, bookCtrl.updateBook);
 

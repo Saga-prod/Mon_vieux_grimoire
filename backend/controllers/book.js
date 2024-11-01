@@ -85,10 +85,37 @@ exports.getAllBook = (req, res, next) => {
     .catch(error => res.status(400).json({ error }))
 }
 
-exports.getTheBestOnes = (req, res, next) => {
-
+exports.getTheBestOnes = (res) => {
+    Book.find()
+        // .sort((a, b) => b.averageRating - a.averageRating)
+        .sort({averageRating: -1})
+        .limit(3)    
+        .then((books) => res.status(200).json(books))
+        .catch(error => res.status(404).json({ message: 'Une erreur est survenue lors de la récupération des 3 meilleurs livres.', error }))                
 }
 
 exports.ratingOne = (req, res, next) => {
+    const updatedRating = {
+        userId: req.auth.userId,
+        grade: req.body.rating
+    };
+    
+    if (updatedRating.grade < 0 || updatedRating.grade > 5) {
+        return res.status(400).json({ message: 'Rating must be between 0 and 5' });
+    }
 
+    Book.findOne({ _id: req.params.id }) 
+        .then((book) => {
+            if (book.ratings.find(rating => rating.userId === req.auth.userId)) { 
+                return res.status(400).json({ message: 'You have already rated this book' })
+            } else {
+                book.ratings.push(updatedRating)
+
+                book.averageRating = (book.averageRating * (book.ratings.length - 1) + updatedRating.grade) / book.ratings.length
+
+                return book.save(); 
+            }
+        })
+        .then((updatedBook) => res.status(201).json(updatedBook))
+        .catch(error => res.status(400).json({ error }));
 }
