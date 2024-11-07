@@ -1,3 +1,4 @@
+require('dotenv').config()
 const http = require('http')
 const app = require('./app')
 
@@ -13,7 +14,7 @@ const normalizePort = val => {
   }
   return false;
 };
-const port = normalizePort(process.env.PORT || '4000');
+const port = normalizePort(process.env.PORT || '4000');
 app.set('port', port);
 
 // la fonction errorHandler  recherche les différentes erreurs et les gère de manière appropriée. Elle est ensuite enregistrée dans le serveur ;

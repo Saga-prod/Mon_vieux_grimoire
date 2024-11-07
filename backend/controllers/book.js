@@ -1,7 +1,7 @@
 const Book = require('../models/Book')
 const fs = require('fs')
 
-exports.createBook = (req, res) => {
+exports.createBook = (req, res, next) => {
     const bookObject = JSON.parse(req.body.book);
     delete bookObject._id;
     delete bookObject._userId;
@@ -15,17 +15,6 @@ exports.createBook = (req, res) => {
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
     averageRating: bookObject.ratings[0].grade,
     })
-
-    // const book = new Book({
-    //     userId,
-    //     title,
-    //     author,
-    //     year,
-    //     genre,
-    //     ratings: ratings || [],
-    //     averageRating: averageRating || 0,
-    //     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-    // });
  
    book.save()
    .then(() => {res.status(201).json({message: 'Livre enregistré !'})})
@@ -83,16 +72,7 @@ exports.getAllBook = (req, res, next) => {
     Book.find()
     .then(things => res.status(200).json(things))
     .catch(error => res.status(400).json({ error }))
-}
-
-exports.getTheBestOnes = (res) => {
-    Book.find()
-        // .sort((a, b) => b.averageRating - a.averageRating)
-        .sort({averageRating: -1})
-        .limit(3)    
-        .then((books) => res.status(200).json(books))
-        .catch(error => res.status(404).json({ message: 'Une erreur est survenue lors de la récupération des 3 meilleurs livres.', error }))                
-}
+}             
 
 exports.ratingOne = (req, res, next) => {
     const updatedRating = {
@@ -119,3 +99,12 @@ exports.ratingOne = (req, res, next) => {
         .then((updatedBook) => res.status(201).json(updatedBook))
         .catch(error => res.status(400).json({ error }));
 }
+
+exports.getTheBestOnes = async (req, res, next) => {
+    try {
+        const books = await Book.find().sort({ averageRating: -1 }).limit(3);
+        res.status(200).json(books);
+    } catch (error) {
+        res.status(500).json({ error });
+    }
+};

@@ -8,13 +8,13 @@ const processImage = require('../middleware/sharp-config')
 
 router.get('/', bookCtrl.getAllBook);
 
-router.get('/:id', bookCtrl.getOneBook)
-
 router.get('/bestrating', bookCtrl.getTheBestOnes)
+
+router.get('/:id', bookCtrl.getOneBook)
 
 router.post('/', auth, multer, processImage, bookCtrl.createBook)
 
-// router.post('/:id/rating', auth, bookCtrl.ratingOne)
+router.post('/:id/rating', auth, bookCtrl.ratingOne)
 
 router.put('/:id', auth, multer, processImage, bookCtrl.updateBook);
 

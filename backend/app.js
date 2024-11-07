@@ -5,9 +5,7 @@ const path = require('path')
 const booksRoutes = require('./routes/books')
 const userRoutes = require ('./routes/user')
 
-mongoose.connect('mongodb+srv://damirsagadbekov:0LWcqcK5iQqd2X9p@cluster0.9s3zo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',
-    { useNewUrlParser: true,
-    useUnifiedTopology: true })
+mongoose.connect('mongodb+srv://damirsagadbekov:0LWcqcK5iQqd2X9p@cluster0.9s3zo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
     .then(() => console.log('Co-MDB réussie'))
     .catch(() => console.log('Co-MDB échouée'))
 
